@@ -22,9 +22,8 @@ mongoose_1.default.set('debug', true);
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 // Serve static files from the public directory
-app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.get('/', (req, res) => {
-    res.sendFile(path_1.default.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path_1.default.join(__dirname, '', 'index.html'));
 });
 // Defined routes
 app.use("/api/employees", employeeRoutes_1.default);
