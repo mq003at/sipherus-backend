@@ -10,7 +10,7 @@
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"
   },
   "engines": {
-    "node": "18.x"
+    "node": "20.6.1"
   },
   "keywords": [],
   "author": "",
