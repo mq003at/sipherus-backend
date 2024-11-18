@@ -1,13 +1,10 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateQRSecret = void 0;
-const crypto_1 = __importDefault(require("crypto"));
+const uuid_1 = require("uuid");
 const generateQRSecret = (employeeId) => {
     const baseSecret = process.env.QRSECRET || "placeholder";
-    const hash = crypto_1.default.createHmac("sha256", baseSecret).update(employeeId).digest("hex");
-    return hash;
+    const uniqueSecret = `${baseSecret}-${employeeId}-${(0, uuid_1.v4)()}`;
+    return uniqueSecret;
 };
 exports.generateQRSecret = generateQRSecret;

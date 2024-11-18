@@ -22,15 +22,6 @@ class EmployeeService extends baseService_1.BaseService {
     constructor() {
         super(employee_1.default);
     }
-    // QR validation. Doesnt have controller
-    validateQRSecret(employeeId, qrSecret) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const employee = yield this.model.findById(employeeId).select("qrSecret").exec();
-            if (!employee)
-                throw ("Can't find employee");
-            return employee.qrSecret === qrSecret;
-        });
-    }
     // Retrieve all employees with selected fields only
     getMinimalEmployeeData() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -43,24 +34,26 @@ class EmployeeService extends baseService_1.BaseService {
     }
     // Overiding employee create
     create(data) {
+        const _super = Object.create(null, {
+            create: { get: () => super.create }
+        });
         return __awaiter(this, void 0, void 0, function* () {
             if (!data.employeeId) {
                 throw new Error("Employee ID is required");
             }
+            console.log("reach");
             data.qrSecret = (0, qrSecret_1.generateQRSecret)(data.employeeId);
-            return yield this.create(data);
+            return _super.create.call(this, data);
         });
     }
     toggleAttendanceStatus(employeeId, qrSecret) {
         return __awaiter(this, void 0, void 0, function* () {
-            const isValid = yield this.validateQRSecret(employeeId, qrSecret);
-            if (!isValid) {
-                throw new Error("Authorization failed: Invalid QR Secret.");
-            }
             const employee = yield this.model.findById(employeeId);
             if (!employee) {
                 throw new Error("Employee not found");
             }
+            if (employee.qrSecret !== qrSecret)
+                throw new Error("Authorization failed: Invalid QR Secret.");
             const newStatus = employee.currentStatus === RealTimeStatus_1.RealTimeStatus.PRESENT
                 ? RealTimeStatus_1.RealTimeStatus.ABSENT
                 : RealTimeStatus_1.RealTimeStatus.PRESENT;

@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttendanceRecordService = void 0;
 const baseService_1 = require("./baseService");
 const attendanceRecord_1 = __importDefault(require("../models/attendanceRecord"));
-const employee_1 = __importDefault(require("../models/employee"));
 class AttendanceRecordService extends baseService_1.BaseService {
     constructor() {
         super(attendanceRecord_1.default); // Pass the AttendanceRecord model to BaseService
@@ -23,12 +22,8 @@ class AttendanceRecordService extends baseService_1.BaseService {
     // Override create
     create(data) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("data", data);
             const attendanceRecord = yield this.model.create(data);
-            // Update the employee's current status and last status update
-            yield employee_1.default.findByIdAndUpdate(attendanceRecord.employeeId, {
-                currentStatus: attendanceRecord.status,
-                lastStatusUpdate: new Date(),
-            }, { new: true });
             return attendanceRecord;
         });
     }

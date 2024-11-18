@@ -21,7 +21,6 @@ mongoose_1.default.set('debug', true);
 // Middleware
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-// Serve static files from the public directory
 app.get('/', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, '', 'index.html'));
 });
