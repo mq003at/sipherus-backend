@@ -1,7 +1,7 @@
-import crypto from "crypto";
+import { v4 as uuidv4 } from 'uuid';
 
 export const generateQRSecret = (employeeId: string): string => {
     const baseSecret = process.env.QRSECRET || "placeholder";
-    const hash = crypto.createHmac("sha256", baseSecret).update(employeeId).digest("hex");
-    return hash;
-  };
+    const uniqueSecret = `${baseSecret}-${employeeId}-${uuidv4()}`;
+    return uniqueSecret;
+};

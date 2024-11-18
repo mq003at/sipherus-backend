@@ -9,13 +9,6 @@ export class EmployeeService extends BaseService<IEmployee> {
     super(Employee); 
   }
 
-    // QR validation. Doesnt have controller
-    async validateQRSecret(employeeId: string, qrSecret: string): Promise<boolean> {
-      const employee = await this.model.findById(employeeId).select("qrSecret").exec();
-      if (!employee) throw("Can't find employee");
-      return employee.qrSecret === qrSecret;
-    }
-
   // Retrieve all employees with selected fields only
   async getMinimalEmployeeData(): Promise<Partial<IEmployee>[]> {
     const employees = await this.model
@@ -30,22 +23,19 @@ export class EmployeeService extends BaseService<IEmployee> {
     if (!data.employeeId) {
       throw new Error("Employee ID is required");
     }
+    console.log("reach")
     data.qrSecret = generateQRSecret(data.employeeId);
-    return await this.create(data);
+    return super.create(data);
   }
 
   async toggleAttendanceStatus(employeeId: string, qrSecret: string): Promise<IEmployee> {
-    const isValid = await this.validateQRSecret(employeeId, qrSecret);
-
-    if (!isValid) {
-      throw new Error("Authorization failed: Invalid QR Secret.");
-    }
-
     const employee = await this.model.findById(employeeId);
 
     if (!employee) {
       throw new Error("Employee not found");
     }
+
+    if (employee.qrSecret !== qrSecret) throw new Error("Authorization failed: Invalid QR Secret.");
 
     const newStatus =
       employee.currentStatus === RealTimeStatus.PRESENT

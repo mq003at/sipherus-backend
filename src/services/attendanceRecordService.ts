@@ -9,18 +9,8 @@ export class AttendanceRecordService extends BaseService<IAttendanceRecord> {
 
   // Override create
   async create(data: Partial<IAttendanceRecord>): Promise<IAttendanceRecord> {
+    console.log("data", data);
     const attendanceRecord = await this.model.create(data);
-
-    // Update the employee's current status and last status update
-    await Employee.findByIdAndUpdate(
-      attendanceRecord.employeeId,
-      {
-        currentStatus: attendanceRecord.status,
-        lastStatusUpdate: new Date(),
-      },
-      { new: true }
-    );
-
     return attendanceRecord;
   }
 }
