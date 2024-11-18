@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import express from "express";
 import employeeRoutes  from "./routes/employeeRoutes";
 import attendanceRecordRoutes  from "./routes/attendanceRecordRoutes";
+import path from "path";
 
 dotenv.config();
 
@@ -18,9 +19,11 @@ mongoose.set('debug', true);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Home route
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.get('/', (req, res) => {
-    res.send('Welcome to the Backend of Sipherus Project');
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Defined routes
