@@ -5,11 +5,14 @@ import express from "express";
 import employeeRoutes  from "./routes/employeeRoutes";
 import attendanceRecordRoutes  from "./routes/attendanceRecordRoutes";
 import path from "path";
+import cors from 'cors';
+
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+app.use(cors());
 
 // Connect to the database
 connectDb();
